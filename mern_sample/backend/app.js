@@ -98,11 +98,10 @@ app.post('/api/login', async (req, res) => {
 
 
 
-//const crypto = require('crypto');
+// const crypto = require('crypto');
 
 // Generate a random key with 256 bits (32 bytes)
-//crypto.randomBytes(32).toString('hex')
-const secretKey = secret123;
+const secretKey = process.env.REACT_APP_SECRET_KEY ;
 
 console.log('Generated JWT Secret Key:', secretKey);
 const generateToken = (user) => {
@@ -193,7 +192,7 @@ app.put('/api/profile', verifyToken, async (req, res) => {
 });
 
 
-
+const port=process.env.PORT;
 
 app.listen(5000, () => {
   console.log('Server is running on port 5000');
