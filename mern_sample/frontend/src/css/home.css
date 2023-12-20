@@ -1,0 +1,52 @@
+/* Background color for the entire home page */
+.guvi-bg-color {
+  background-color: hsl(0, 0%, 100%); /* Replace with GUVI's background color */
+}
+
+/* Header styles */
+.guvi-header {
+  padding: 30px 20px;
+  text-align: center;
+}
+
+.guvi-heading {
+  font-size: 36px;
+  font-weight: bold;
+  color: #333; /* Adjust as needed */
+}
+
+.guvi-subheading {
+  font-size: 18px;
+  color: #666; /* Adjust as needed */
+  margin-top: 10px;
+}
+
+.guvi-btn {
+  background-color: #00c60a; /* GUVI's primary color */
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+/* Main content styles */
+.guvi-main {
+  padding: 20px;
+}
+
+.guvi-section-heading {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.guvi-feature-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.guvi-feature {
+  margin-bottom: 10px;
+}
