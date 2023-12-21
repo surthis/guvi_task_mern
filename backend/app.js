@@ -101,18 +101,21 @@ app.post('/api/login', async (req, res) => {
 // const crypto = require('crypto');
 
 // Generate a random key with 256 bits (32 bytes)
-const secretKey = process.env.REACT_APP_SECRET_KEY ;
-
-console.log('Generated JWT Secret Key:', secretKey);
-const generateToken = (user) => {
-  const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
-  console.log('Token generated:', token);
-  return token;
-}
-
-// Verify the JWT token in your routes
 const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization.split(' ')[1]; // Assuming token is in the 'Authorization' header
+  const authorizationHeader = req.headers.authorization;
+
+  if (!authorizationHeader) {
+    return res.status(403).json({ message: 'Authorization header is missing' });
+  }
+
+  const tokenParts = authorizationHeader.split(' ');
+
+  if (tokenParts.length !== 2 || tokenParts[0] !== 'Bearer') {
+    return res.status(403).json({ message: 'Invalid authorization header format' });
+  }
+
+  const token = tokenParts[1];
+
   jwt.verify(token, secretKey, (err, decoded) => {
     if (err) {
       return res.status(403).json({ message: 'Invalid token' });
@@ -120,7 +123,7 @@ const verifyToken = (req, res, next) => {
     req.userId = decoded.userId;
     next();
   });
-}
+};
 
 // Use verifyToken middleware in your profile route
 app.get('/api/profile', verifyToken, async (req, res) => {
