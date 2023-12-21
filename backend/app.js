@@ -101,6 +101,16 @@ app.post('/api/login', async (req, res) => {
 // const crypto = require('crypto');
 
 // Generate a random key with 256 bits (32 bytes)
+const secretKey = process.env.REACT_APP_SECRET_KEY ;
+
+console.log('Generated JWT Secret Key:', secretKey);
+const generateToken = (user) => {
+  const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
+  console.log('Token generated:', token);
+  return token;
+}
+
+// Verify the JWT token in your routes
 const verifyToken = (req, res, next) => {
   const authorizationHeader = req.headers.authorization;
 
@@ -124,6 +134,7 @@ const verifyToken = (req, res, next) => {
     next();
   });
 };
+
 
 // Use verifyToken middleware in your profile route
 app.get('/api/profile', verifyToken, async (req, res) => {
