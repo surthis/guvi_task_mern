@@ -23,6 +23,9 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
+app.get('/', (req, res) => {
+  res.send('Hello, this is your backend server!');
+});
 app.post('/api/register', async (req, res) => {
   console.log('Received a registration request');
   const userData = req.body;
