@@ -66,6 +66,37 @@ app.post('/api/register', async (req, res) => {
 
 
 
+// Add this route after your registration route in app.js
+
+app.get('/api/register/:userId', async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    // Find the user by ID in the database
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Send the user details in the response
+    res.status(200).json({
+      success: true,
+      message: 'User details retrieved successfully',
+      user: {
+        name: user.name,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        age: user.age,
+        gender: user.gender,
+        dob: user.dob,
+      },
+    });
+  } catch (error) {
+    console.error('Error retrieving user details:', error);
+    res.status(500).json({ success: false, message: 'Error retrieving user details' });
+  }
+});
 
 
 app.post('/api/login', async (req, res) => {
@@ -211,6 +242,6 @@ app.put('/api/profile', verifyToken, async (req, res) => {
 
 const port=process.env.PORT;
 
-app.listen(5000, () => {
+app.listen(port, () => {
   console.log('Server is running on port 5000');
 });
