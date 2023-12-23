@@ -65,73 +65,6 @@ app.post('/api/register', async (req, res) => {
 });
 
 
-
-// Add this route after your registration route in app.js
-
-app.get('/api/register/:userId', async (req, res) => {
-  const userId = req.params.userId;
-
-  try {
-    // Find the user by ID in the database
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
-
-    // Send the user details in the response
-    res.status(200).json({
-      success: true,
-      message: 'User details retrieved successfully',
-      user: {
-        name: user.name,
-        email: user.email,
-        phoneNumber: user.phoneNumber,
-        age: user.age,
-        gender: user.gender,
-        dob: user.dob,
-      },
-    });
-  } catch (error) {
-    console.error('Error retrieving user details:', error);
-    res.status(500).json({ success: false, message: 'Error retrieving user details' });
-  }
-});
-
-
-app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    // Check if the user exists in the database
-    const user = await User.findOne({ email: email });
-
-    if (!user) {
-      res.status(401).json({ success: false, message: 'User not found' });
-      return;
-    }
-
-    // Check if the provided password matches the stored password (you should use a secure password hashing library)
-    if (user.password !== password) {
-      res.status(401).json({ success: false, message: 'Password incorrect' });
-      return;
-    }
-
-    // Generate a JWT token and send it in the response
-    const token = generateToken(user);
-
-    // If both email and password are correct, return a success response
-    res.status(200).json({ success: true,  message: 'Login successful',   token, name: user.name,   phoneNumber: user.phoneNumber, });
-    // console.log(user.name);
-    console.log(user.phoneNumber);
-  } catch (error) {
-    console.error('Login failed:', error);
-    res.status(500).json({ success: false, message: 'Login failed' });
-  }
-});
-
-
-
 // const crypto = require('crypto');
 
 // Generate a random key with 256 bits (32 bytes)
@@ -168,6 +101,42 @@ const verifyToken = (req, res, next) => {
     next();
   });
 };
+
+
+
+app.post('/api/login', verifyToken , async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Check if the user exists in the database
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      res.status(401).json({ success: false, message: 'User not found' });
+      return;
+    }
+
+    // Check if the provided password matches the stored password (you should use a secure password hashing library)
+    if (user.password !== password) {
+      res.status(401).json({ success: false, message: 'Password incorrect' });
+      return;
+    }
+
+    // Generate a JWT token and send it in the response
+    const token = generateToken(user);
+
+    // If both email and password are correct, return a success response
+    res.status(200).json({ success: true,  message: 'Login successful',   token, name: user.name,   phoneNumber: user.phoneNumber, });
+    // console.log(user.name);
+    console.log(user.phoneNumber);
+  } catch (error) {
+    console.error('Login failed:', error);
+    res.status(500).json({ success: false, message: 'Login failed' });
+  }
+});
+
+
+
 
 
 // Use verifyToken middleware in your profile route
